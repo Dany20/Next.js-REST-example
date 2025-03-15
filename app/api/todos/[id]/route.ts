@@ -22,17 +22,20 @@ export async function GET(request: Request) {
   }
 }
 
-export async function PUT(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(request: Request) {
+  const url = new URL(request.url);
+  const id = url.pathname.split('/').pop();
+  if (!id) {
+    return NextResponse.json({ message: 'ID is required' }, { status: 400 });
+  }
+
   try {
     const { title, description, completed } = await request.json();
     if (!title) {
       return NextResponse.json({ message: 'Title is required' }, { status: 400 });
     }
     const updatedTodo = await prisma.todo.update({
-      where: { id: params.id },
+      where: { id },
       data: { title, description, completed },
     });
     return NextResponse.json(updatedTodo, { status: 200 });
@@ -43,13 +46,16 @@ export async function PUT(
   }
 }
 
-export async function DELETE(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(request: Request) {
+  const url = new URL(request.url);
+  const id = url.pathname.split('/').pop();
+  if (!id) {
+    return NextResponse.json({ message: 'ID is required' }, { status: 400 });
+  }
+
   try {
     await prisma.todo.delete({
-      where: { id: params.id },
+      where: { id },
     });
     return NextResponse.json({ message: 'Todo deleted' }, { status: 200 });
   } catch (error) {
