@@ -1,13 +1,15 @@
 import { NextResponse } from 'next/server';
 import {prisma} from '@/lib/prisma';
 
-export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+export async function GET(request: Request) {
   try {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get("id");
+    if (!id) {
+      return NextResponse.json({ message: 'ID is required' }, { status: 400 });
+    }
     const todo = await prisma.todo.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
     if (!todo) {
       return NextResponse.json({ message: 'Todo not found' }, { status: 404 });
