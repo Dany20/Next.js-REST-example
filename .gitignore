@@ -16,6 +16,16 @@
 # next.js
 /.next/
 /out/
+.next/static/
+.next/build-manifest.json
+.next/BUILD_ID
+
+# Log files
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 # production
 /build
@@ -39,3 +49,15 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Prisma migration history
+prisma/migrations/.DS_Store
+prisma/migrations/*.sql
+
+# Prisma specific
+prisma/.cache/
+*.db
+.env.local
+.env.development.local
+.env.production.local
+.env.test.local
